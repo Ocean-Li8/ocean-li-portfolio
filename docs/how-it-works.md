@@ -25,8 +25,8 @@ A project with `draft: true` shows up when you run the site on your laptop (`npm
 ## What happens when you push
 
 - Pushing to the `main` branch updates the live site, usually within a minute.
-- Pushing any other branch gives you a private preview link with drafts showing, so you can check things before they go live.
-- If something is broken (for example, a typo in a project's details), the build fails and the live site stays as it was.
+- Pushing any other branch gives you a separate preview link with drafts showing, so you can check things before they go live. Preview links aren't listed anywhere, but don't treat them as secret.
+- If something is broken (for example, a typo in a project's details, even in an optional one like `Draft:`), the build fails and the live site stays as it was.
 
 ## Putting the site live (one-time, your clicks)
 

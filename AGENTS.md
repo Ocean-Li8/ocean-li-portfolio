@@ -16,7 +16,8 @@ Run `npm test`, `npm run check` and `npm run build` before every commit; all thr
 ## Layout
 
 - `src/content/projects/<slug>/`: one folder per project: `index.md` plus its images.
-- `src/content.config.ts`: the project schema. The only place project fields are defined.
+- `src/content.config.ts`: wires the project folders into Astro.
+- `src/lib/projectSchema.ts`: the project fields (tested in `projectSchema.test.ts`). The only place fields are defined. It is strict: unknown or misspelled fields fail the build.
 - `src/lib/projects.ts`: rules for URLs, drafts and ordering (tested in `projects.test.ts`).
 - `src/lib/getProjects.ts`: `getVisibleProjects()`, the one way pages get their project list.
 - `src/pages/`: `index.astro` (project list) and `projects/[slug].astro` (one page per project).
@@ -27,8 +28,8 @@ Run `npm test`, `npm run check` and `npm run build` before every commit; all thr
 ## Adding a project
 
 1. Copy `src/content/projects/sample-robotic-arm/` to `src/content/projects/<project-name>/`. The folder name becomes the URL (`Robotic Arm` → `/projects/robotic-arm/`).
-2. Edit `index.md`. Fields:
-   - Required: `title`, `summary` (one or two sentences), `date` (YYYY-MM-DD).
+2. Edit `index.md`, replacing every sample value: the copy carries placeholder `tags`, `featured: true`, a fake `links.repo` and a placeholder `cover.png`. Remove any field the project doesn't have, and delete `cover.png` unless you replace it. Fields:
+   - Required: `title`, `summary` (one or two sentences), `date` (full YYYY-MM-DD; a year alone is rejected).
    - Optional: `tags` (list), `cover` (image path relative to the folder, e.g. `./cover.jpg`), `featured` (true lists it first), `draft` (true hides it from the live site), `links` with `repo`, `video`, `writeup` (full URLs).
    - The body below the `---` is the write-up, in Markdown.
 3. Put images in the same folder.
@@ -40,7 +41,7 @@ The two `sample-*` projects are drafts kept as examples; they never appear on th
 
 - No server code, no database, no Astro server adapter; `output` stays `'static'`.
 - Pages get projects only through `getVisibleProjects()`; never filter drafts or sort on your own.
-- Change project fields only in `src/content.config.ts`, and update the samples and this file to match.
+- Change project fields only in `src/lib/projectSchema.ts` (with a test), and update the samples and this file to match.
 - No styling, fonts or UI libraries until the design phase defines them in `docs/superpowers/specs/`.
 - Never commit `.env*` files or secrets.
 - Commit messages: imperative subject that says why.
