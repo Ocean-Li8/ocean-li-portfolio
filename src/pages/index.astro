@@ -1,16 +1,24 @@
 ---
+import Base from '../layouts/Base.astro';
+import { getVisibleProjects } from '../lib/getProjects';
+
+const projects = await getVisibleProjects();
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Base title="Your Name">
+  <h1>Your Name</h1>
+  {
+    projects.length === 0 ? (
+      <p>No projects yet.</p>
+    ) : (
+      <ul>
+        {projects.map((project) => (
+          <li>
+            <a href={`/projects/${project.id}/`}>{project.data.title}</a>
+            <p>{project.data.summary}</p>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</Base>

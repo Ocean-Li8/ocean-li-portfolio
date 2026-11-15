@@ -1,0 +1,33 @@
+---
+import { Image } from 'astro:assets';
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { getVisibleProjects } from '../../lib/getProjects';
+
+export async function getStaticPaths() {
+  const projects = await getVisibleProjects();
+  return projects.map((project) => ({ params: { slug: project.id }, props: { project } }));
+}
+
+const { project } = Astro.props;
+const { title, date, tags, cover, links } = project.data;
+const { Content } = await render(project);
+---
+
+<Base title={title}>
+  <p><a href="/">Back to all projects</a></p>
+  <h1>{title}</h1>
+  <p><time datetime={date.toISOString()}>{date.toLocaleDateString('en-CA', { year: 'numeric', month: 'long', timeZone: 'UTC' })}</time></p>
+  {tags.length > 0 && <p>{tags.join(', ')}</p>}
+  {cover && <Image src={cover} alt={`Cover image for ${title}`} />}
+  {
+    links && (
+      <ul>
+        {links.repo && <li><a href={links.repo}>Code</a></li>}
+        {links.video && <li><a href={links.video}>Video</a></li>}
+        {links.writeup && <li><a href={links.writeup}>Write-up</a></li>}
+      </ul>
+    )
+  }
+  <Content />
+</Base>
